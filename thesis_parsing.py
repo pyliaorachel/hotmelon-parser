@@ -2,9 +2,7 @@ import re
 
 class SplitterConst:
 	CHAPTER = '\\chapter'
-	SECTION = '\\section'
-	SUBSECTION = '\\subsection'
-	SUBSUBSECTION = '\\subsubsection'
+	SECTION = '\\_section'
 
 class RegPatternConst:
 	THESIS_TITLE = r'\\title(\[.*\])?{(?P<title>.*)}'
@@ -15,14 +13,9 @@ class Splitter:
 	def split_chapters(text):
 		return text.split(SplitterConst.CHAPTER)[1:]
 
-	def split_sections(chapter):
-		return chapter.split(SplitterConst.SECTION)[1:]
-
-	def split_subsections(section):
-		return section.split(SplitterConst.SUBSECTION)[1:]
-
-	def split_subsubsections(section):
-		return section.split(SplitterConst.SUBSUBSECTION)[1:]
+	def split_sections(text, level=0):
+		split_txt = SplitterConst.SECTION.replace('_', 'sub' * level)
+		return text.split(split_txt)[1:]
 
 class Extracter:
 	def remove_inner_commands(text):
