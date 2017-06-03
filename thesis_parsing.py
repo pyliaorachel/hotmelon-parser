@@ -126,7 +126,7 @@ class Thesis(dict):
 		self['subtitle'] = subtitle
 		self['chapters'] = []
 		self['authors'] = []
-		self['abstraction'] = abstraction
+		self['abstract'] = abstraction
 		self['date'] = date
 
 class Chapter(dict):
