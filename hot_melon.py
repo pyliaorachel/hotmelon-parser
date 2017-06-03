@@ -28,4 +28,4 @@ if __name__ == '__main__':
 		db.put_all_figures(parser.historical_graphic_paths, parser.base_path, parser.key)
 		update_image_urls(thesis, parser.key)
 
-		print(json.dumps(thesis))
+		db.put_data(parser.key, thesis)
