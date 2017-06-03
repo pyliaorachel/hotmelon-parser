@@ -57,12 +57,15 @@ class Extracter:
 	def remove_table(text):
 		return re.sub(RegPatternConst.TABLE, '', text)
 
+	def remove_newlines(text):
+		return re.sub(r'(\n|\t)', '', text)
+
 	def clean_content(text):
 		text = Extracter.remove_header(text)
 		text = Extracter.remove_table(text)
 		text = Extracter.remove_comments(text)
 		text = Extracter.remove_inner_commands(text)
-		text = text.strip()
+		text = Extracter.remove_newlines(text)
 		return text
 
 	def extract_to_list(text):
