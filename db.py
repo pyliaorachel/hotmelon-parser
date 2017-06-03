@@ -37,12 +37,12 @@ def put_all_figures(dir_paths, base_path, key):
 					prefix = root.split(base_path)[-1]
 					upload_path = '{}{}'.format(key, os.path.join(prefix, filename))
 
-					# try:
-					# 	storage.child(upload_path).put(filepath)
+					try:
+						storage.child(upload_path).put(filepath)
 
-					# except Exception as e:
-					# 	print(e)
-					# 	continue
+					except Exception as e:
+						print(e)
+						continue
 
 					walked_path |= {filepath}
 

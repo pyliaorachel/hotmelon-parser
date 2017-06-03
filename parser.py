@@ -1,6 +1,7 @@
 import sys
 import os
 from thesis_parsing import Splitter, Extracter, Thesis, Chapter, Section
+import api
 
 class Parser(object):
 	def __init__(self, filename):
@@ -9,6 +10,10 @@ class Parser(object):
 		self.graphic_paths = [self.base_path]
 		self.historical_graphic_paths = set()
 		self.key = ''
+
+	def parse_keywords(self, text):
+		keywords = api.get_keywords(text)
+		return keywords
 
 	def parse_sections(self, raw_text, level=0, max_level=2):
 		if level > max_level:
@@ -27,6 +32,7 @@ class Parser(object):
 			section_data = Section(title=section_title)
 			if level + 1 <= max_level:
 				section_data['content'], section_data['figures'], section_data['subsections'] = self.parse_sections(section, level=level+1, max_level=max_level)		
+				section_data['keywords'] = self.parse_keywords(section_data['content'])
 
 			section_list.append(section_data)
 
@@ -40,6 +46,7 @@ class Parser(object):
 			chapter_title = Extracter.extract_title(chapter)
 			chapter_data = Chapter(title=chapter_title)
 			chapter_data['content'], chapter_data['figures'], chapter_data['sections'] = self.parse_sections(chapter)
+			chapter_data['keywords'] = self.parse_keywords(chapter_data['content'])
 
 			chapter_list.append(chapter_data)
 
