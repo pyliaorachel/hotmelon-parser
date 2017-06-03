@@ -9,7 +9,7 @@ class RegPatternConst:
 	THESIS_TITLE = r'\\title(\[.*\])?{(?P<title>.*)}'
 	FIRST_PAREN = r'^(\[.*\])?{(?P<content>.*)}'
 	AUTHOR = r'\\author(\[.*\])?{(?P<author>.*)}'
-	ABSTRACT = r'\\begin{abstract}\n*(?P<abstract>.*)\n*\\end{abstract}'
+	ABSTRACT = r'\\begin{abstract}\n*(?P<abstract>(.|\n)*)\n*\\end{abstract}'
 	DATE = r'\\degreedate(\[.*\])?{(?P<date>.*)}'
 	SUBTITLE = r'\\subtitle(\[.*\])?{(?P<subtitle>.*)}'
 	GRAPHIC_PATH = r'\\graphicspath{(?P<paths>.*)}'
@@ -124,12 +124,12 @@ class Extracter:
 		return Extracter.remove_inner_commands(match.group('subtitle')) if match else ''
 
 class Thesis(dict):
-	def __init__(self, title='', subtitle='', abstraction='', date=''):
+	def __init__(self, title='', subtitle='', abstract='', date=''):
 		self['title'] = title
 		self['subtitle'] = subtitle
 		self['chapters'] = []
 		self['authors'] = []
-		self['abstract'] = abstraction
+		self['abstract'] = abstract
 		self['date'] = date
 
 class Chapter(dict):
