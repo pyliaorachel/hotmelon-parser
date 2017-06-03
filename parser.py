@@ -45,6 +45,9 @@ class Parser(object):
 		
 		thesis['chapters'] = self.parse_chapters(thesis_raw)
 		thesis['authors'] = Extracter.extract_authors(thesis_raw)
+		thesis['abstract'] = Extracter.extract_abstract(thesis_raw)
+		thesis['date'] = Extracter.extract_date(thesis_raw)
+		thesis['subtitle'] = Extracter.extract_subtitle(thesis_raw)
 
 		print(json.dumps(thesis))
 

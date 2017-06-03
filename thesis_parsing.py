@@ -8,6 +8,9 @@ class RegPatternConst:
 	THESIS_TITLE = r'\\title(\[.*\])?{(?P<title>.*)}'
 	FIRST_PAREN = r'^(\[.*\])?{(?P<content>.*)}'
 	AUTHOR = r'\\author(\[.*\])?{(?P<author>.*)}'
+	ABSTRACT = r'\\begin{abstract}\n*(?P<abstract>.*)\n*\\end{abstract}'
+	DATE = r'\\degreedate(\[.*\])?{(?P<date>.*)}'
+	SUBTITLE = r'\\subtitle(\[.*\])?{(?P<subtitle>.*)}'
 	INNER_COMMANDS = r'\\[^{}]+(\[.*\])?{[^{}]*}{(?P<content>[^{}]*)}'
 
 class Splitter:
@@ -33,18 +36,33 @@ class Extracter:
 	def extract_title(text):
 		"""{title} at the first line"""
 		match = re.search(RegPatternConst.FIRST_PAREN, text)
-		return Extracter.remove_inner_commands(match.group('content')) if match else None
+		return Extracter.remove_inner_commands(match.group('content')) if match else ''
 
 	def extract_thesis_title(text):
 		"""\title{title} anywhere in text"""
 		match = re.search(RegPatternConst.THESIS_TITLE, text)
-		return Extracter.remove_inner_commands(match.group('title')) if match else None
+		return Extracter.remove_inner_commands(match.group('title')) if match else ''
 
 	def extract_authors(text):
 		"""\author[*]{author}"""
 		match = re.finditer(RegPatternConst.AUTHOR, text)
 		authors = list(map(lambda m: m.group('author'), match))
 		return authors
+
+	def extract_abstract(text):
+		"""\begin{abstract}...\end{abstract}"""
+		match = re.search(RegPatternConst.ABSTRACT, text)
+		return Extracter.remove_inner_commands(match.group('abstract')) if match else ''
+
+	def extract_date(text):
+		"""\degreedate{date}"""
+		match = re.search(RegPatternConst.DATE, text)
+		return Extracter.remove_inner_commands(match.group('date')) if match else ''
+
+	def extract_subtitle(text):
+		"""\subtitle{subtitle}"""
+		match = re.search(RegPatternConst.SUBTITLE, text)
+		return Extracter.remove_inner_commands(match.group('subtitle')) if match else ''
 
 class Thesis(dict):
 	def __init__(self, title='', subtitle='', abstraction='', conclusion='', date=''):
