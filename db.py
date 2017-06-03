@@ -18,6 +18,13 @@ storage = firebase.storage()
 def get_file_ext(filename):
 	return filename.split('.')[-1]
 
+def put_data(data, key):
+	try:
+		db.child(key).set(data)
+
+	except Exception as e:
+		print(e)
+
 def put_all_figures(dir_paths, base_path, key):
 	walked_path = set()
 
