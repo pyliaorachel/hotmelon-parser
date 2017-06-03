@@ -1,4 +1,5 @@
 import re
+import glob
 
 class SplitterConst:
 	CHAPTER = '\\chapter'
@@ -12,6 +13,7 @@ class RegPatternConst:
 	DATE = r'\\degreedate(\[.*\])?{(?P<date>.*)}'
 	SUBTITLE = r'\\subtitle(\[.*\])?{(?P<subtitle>.*)}'
 	GRAPHIC_PATH = r'\\graphicspath{(?P<paths>.*)}'
+	GRAPHIC = r'\\includegraphics(\[.*\])?{(?P<graphic>.*)}'
 
 	INNER_COMMANDS_REPLACE = r'\\[^{}]+(\[.*\])?{[^{}]*}{(?P<content>[^{}]*)}'
 	CONFIG_COMMANDS = r'\\[^ \t\n]*({.*})?'
@@ -72,6 +74,20 @@ class Extracter:
 	def extract_graphic_paths(text):
 		match = re.search(RegPatternConst.GRAPHIC_PATH, text)
 		return Extracter.extract_to_list(match.group('paths')) if match else None
+
+	def extract_figures(text, path_prefix, base_path):
+		match = re.finditer(RegPatternConst.GRAPHIC, text)
+		figures = list(map(lambda m: m.group('graphic'), match))
+
+		figure_paths = []
+		for figure in figures:
+			for path in path_prefix:
+				full_path = '{}/{}{}.*'.format(base_path, path, figure)
+				if glob.glob(full_path):
+					f_ext = glob.glob(full_path)[0].split('.')[-1]
+					figure_paths.append('{}{}.{}'.format(path, figure, f_ext))
+
+		return figure_paths
 
 	def extract_title(text):
 		"""{title} at the first line"""

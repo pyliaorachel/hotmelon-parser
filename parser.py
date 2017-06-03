@@ -1,11 +1,13 @@
 import sys
+import os
 import json
 from thesis_parsing import Splitter, Extracter, Thesis, Chapter, Section
 
 class Parser(object):
 	def __init__(self, filename):
 		self.filename = filename
-		self.graphic_paths = []
+		self.base_path = os.path.dirname(os.path.realpath(filename))
+		self.graphic_paths = [self.base_path]
 
 	def parse_sections(self, raw_text, level=0, max_level=2):
 		if level > max_level:
@@ -21,11 +23,11 @@ class Parser(object):
 			section_title = Extracter.extract_title(section)
 			section_data = Section(title=section_title)
 			if level + 1 <= max_level:
-				section_data['content'], section_data['subsections'] = self.parse_sections(section, level=level+1, max_level=max_level)		
+				section_data['content'], section_data['figures'], section_data['subsections'] = self.parse_sections(section, level=level+1, max_level=max_level)		
 
 			section_list.append(section_data)
 
-		return (Extracter.clean_content(content), section_list)
+		return (Extracter.clean_content(content), Extracter.extract_figures(content, self.graphic_paths, self.base_path), section_list)
 
 	def parse_chapters(self, raw_text):
 		chapter_list = []
@@ -34,7 +36,7 @@ class Parser(object):
 		for chapter in chapters:
 			chapter_title = Extracter.extract_title(chapter)
 			chapter_data = Chapter(title=chapter_title)
-			chapter_data['content'], chapter_data['sections'] = self.parse_sections(chapter)
+			chapter_data['content'], chapter_data['figures'], chapter_data['sections'] = self.parse_sections(chapter)
 
 			chapter_list.append(chapter_data)
 
