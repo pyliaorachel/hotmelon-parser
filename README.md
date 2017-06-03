@@ -2,6 +2,7 @@
 
 - Dependencies
 	- `pip install flap` # flatten latex files  
+	- `pip install pyrebase` # firebase  
 
 - Structure of thesis
 	```
