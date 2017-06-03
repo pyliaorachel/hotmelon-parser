@@ -7,6 +7,7 @@ class SplitterConst:
 class RegPatternConst:
 	THESIS_TITLE = r'\\title(\[.*\])?{(?P<title>.*)}'
 	FIRST_PAREN = r'^(\[.*\])?{(?P<content>.*)}'
+	AUTHOR = r'\\author(\[.*\])?{(?P<author>.*)}'
 	INNER_COMMANDS = r'\\[^{}]+(\[.*\])?{[^{}]*}{(?P<content>[^{}]*)}'
 
 class Splitter:
@@ -39,12 +40,18 @@ class Extracter:
 		match = re.search(RegPatternConst.THESIS_TITLE, text)
 		return Extracter.remove_inner_commands(match.group('title')) if match else None
 
+	def extract_authors(text):
+		"""\author[*]{author}"""
+		match = re.finditer(RegPatternConst.AUTHOR, text)
+		authors = list(map(lambda m: m.group('author'), match))
+		return authors
+
 class Thesis(dict):
 	def __init__(self, title='', subtitle='', abstraction='', conclusion='', date=''):
 		self['title'] = title
 		self['subtitle'] = subtitle
 		self['chapters'] = []
-		self['author'] = []
+		self['authors'] = []
 		self['abstraction'] = abstraction
 		self['conclusion'] = conclusion
 		self['date'] = date
