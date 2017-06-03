@@ -5,6 +5,7 @@ from thesis_parsing import Splitter, Extracter, Thesis, Chapter, Section
 class Parser(object):
 	def __init__(self, filename):
 		self.filename = filename
+		self.graphic_paths = []
 
 	def parse_sections(self, raw_text, level=0, max_level=2):
 		if level > max_level:
@@ -12,16 +13,19 @@ class Parser(object):
 
 		section_list = []
 
-		sections = Splitter.split_sections(raw_text, level=level)
+		content, sections = Splitter.split_sections(raw_text, level=level)
+		graphic_paths = Extracter.extract_graphic_paths(content)
+		self.graphic_paths = graphic_paths if graphic_paths else self.graphic_paths # update current graphic paths
+
 		for section in sections:
 			section_title = Extracter.extract_title(section)
 			section_data = Section(title=section_title)
 			if level + 1 <= max_level:
-				section_data['subsections'] = self.parse_sections(section, level=level+1, max_level=max_level)
+				section_data['content'], section_data['subsections'] = self.parse_sections(section, level=level+1, max_level=max_level)		
 
 			section_list.append(section_data)
 
-		return section_list
+		return (Extracter.clean_content(content), section_list)
 
 	def parse_chapters(self, raw_text):
 		chapter_list = []
@@ -30,7 +34,7 @@ class Parser(object):
 		for chapter in chapters:
 			chapter_title = Extracter.extract_title(chapter)
 			chapter_data = Chapter(title=chapter_title)
-			chapter_data['sections'] = self.parse_sections(chapter)
+			chapter_data['content'], chapter_data['sections'] = self.parse_sections(chapter)
 
 			chapter_list.append(chapter_data)
 
