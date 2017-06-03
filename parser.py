@@ -7,10 +7,11 @@ class Parser(object):
 		self.filename = filename
 
 	def parse(self):
-		thesis = Thesis()
-
 		with open(self.filename, 'r') as f:
 			thesis_raw = f.read()
+
+		thesis_title = Extracter.extract_thesis_title(thesis_raw)
+		thesis = Thesis(title=thesis_title)
 
 		# chapter
 		chapters = Splitter.split_chapters(thesis_raw)
@@ -35,7 +36,6 @@ class Parser(object):
 					for subsubsection in subsubsections:
 						subsubsection_title = Extracter.extract_title(subsubsection)
 						subsubsection_data = Section(title=subsubsection_title)
-						#print('\t\t{}'.format(subsubsection_title))
 						subsection_data['subsections'].append(subsubsection_data)
 
 					section_data['subsections'].append(subsection_data)
@@ -45,8 +45,6 @@ class Parser(object):
 			thesis['chapters'].append(chapter_data)
 
 		print(json.dumps(thesis))
-		#print(jsonpickle.encode(thesis))
-
 
 if __name__ == '__main__':
 	if len(sys.argv) != 2:
