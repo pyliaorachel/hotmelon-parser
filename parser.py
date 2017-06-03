@@ -7,6 +7,8 @@ class Parser(object):
 		self.filename = filename
 		self.base_path = os.path.dirname(os.path.realpath(filename))
 		self.graphic_paths = [self.base_path]
+		self.historical_graphic_paths = set()
+		self.key = ''
 
 	def parse_sections(self, raw_text, level=0, max_level=2):
 		if level > max_level:
@@ -16,7 +18,9 @@ class Parser(object):
 
 		content, sections = Splitter.split_sections(raw_text, level=level)
 		graphic_paths = Extracter.extract_graphic_paths(content)
-		self.graphic_paths = graphic_paths if graphic_paths else self.graphic_paths # update current graphic paths
+		if graphic_paths:
+			self.graphic_paths = graphic_paths # update current graphic paths
+			self.historical_graphic_paths |= set(graphic_paths)
 
 		for section in sections:
 			section_title = Extracter.extract_title(section)
@@ -53,6 +57,8 @@ class Parser(object):
 		thesis['abstract'] = Extracter.extract_abstract(thesis_raw)
 		thesis['date'] = Extracter.extract_date(thesis_raw)
 		thesis['subtitle'] = Extracter.extract_subtitle(thesis_raw)
+
+		self.key = '{}-{}'.format('_'.join(thesis['title'].split(' ')), '_'.join(thesis['authors'][0].split(' ')))
 
 		return thesis
 
