@@ -1,6 +1,5 @@
 import sys
 import os
-import json
 from thesis_parsing import Splitter, Extracter, Thesis, Chapter, Section
 
 class Parser(object):
@@ -55,14 +54,7 @@ class Parser(object):
 		thesis['date'] = Extracter.extract_date(thesis_raw)
 		thesis['subtitle'] = Extracter.extract_subtitle(thesis_raw)
 
-		print(json.dumps(thesis))
-
-if __name__ == '__main__':
-	if len(sys.argv) != 2:
-		print("Usage: python3 parser.py <latex-file>")
-	else:
-		parser = Parser(sys.argv[1])
-		parser.parse_thesis()
+		return thesis
 
 
 
