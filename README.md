@@ -1,3 +1,3 @@
 ## Usage
 
-`pip install flap`  
+`pip install flap` # flatten latex files  
