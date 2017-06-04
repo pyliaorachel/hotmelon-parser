@@ -3,10 +3,10 @@ import pyrebase
 import os
 
 db_config = {
-  'apiKey': config.FIREBASE_API_KEY,
-  'authDomain': '{}.firebaseapp.com'.format(config.FIREBASE_PROJECT_ID),
-  'databaseURL': 'https://{}.firebaseio.com'.format(config.FIREBASE_PROJECT_ID),
-  'storageBucket': '{}.appspot.com'.format(config.FIREBASE_PROJECT_ID),
+  'apiKey': os.getenv('FIREBASE_API_KEY', config.FIREBASE_API_KEY),
+  'authDomain': '{}.firebaseapp.com'.format(os.getenv('FIREBASE_PROJECT_ID', config.FIREBASE_PROJECT_ID)),
+  'databaseURL': 'https://{}.firebaseio.com'.format(os.getenv('FIREBASE_PROJECT_ID', config.FIREBASE_PROJECT_ID)),
+  'storageBucket': '{}.appspot.com'.format(os.getenv('FIREBASE_PROJECT_ID', config.FIREBASE_PROJECT_ID)),
 }
 
 image_ext = {'jpg', 'jpeg', 'png', 'eps', 'bmp'}
