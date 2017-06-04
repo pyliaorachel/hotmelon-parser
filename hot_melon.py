@@ -17,15 +17,19 @@ def update_image_urls(thesis, key):
 	for chapter in thesis['chapters']:
 		walk_sections(chapter['sections'], key)
 
+def parse_thesis(filepath):
+	parser = Parser(filepath)
+	thesis = parser.parse_thesis()
+
+	db.put_all_figures(parser.historical_graphic_paths, parser.base_path, parser.key)
+	update_image_urls(thesis, parser.key)
+
+	db.put_data(thesis, parser.key)
+	return parser.key
+
 if __name__ == '__main__':
 	if len(sys.argv) != 2:
 		print("Usage: python3 parser.py <path-to-latex-file>")
 
 	else:
-		parser = Parser(sys.argv[1])
-		thesis = parser.parse_thesis()
-
-		db.put_all_figures(parser.historical_graphic_paths, parser.base_path, parser.key)
-		update_image_urls(thesis, parser.key)
-
-		db.put_data(thesis, parser.key)
+		key = parse_thesis(sys.argv[1])
