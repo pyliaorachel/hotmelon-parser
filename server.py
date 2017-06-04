@@ -64,6 +64,13 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
 		message = 'Hello world!'
 		self.wfile.write(bytes(message, 'utf8'))
+
+	def do_OPTIONS(self):
+		self.send_response(200)
+
+		self.send_header('Access-Control-Allow-Origin', self.headers['Origin'])
+		self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+		self.end_headers()
  
 def run():
 	print('starting server...')
