@@ -70,7 +70,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
 		self.send_header('Access-Control-Allow-Origin', self.headers['Origin'])
 		self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-		self.send_header('Access-Control-Request-Headers', 'Content-Type')
+		self.send_header('Access-Control-Allow-Headers', 'Content-Type')
 		self.end_headers()
  
 def run():
