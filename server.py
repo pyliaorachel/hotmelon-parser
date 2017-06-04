@@ -3,7 +3,7 @@ import urllib.parse
 import os
 from hot_melon import parse_thesis
 
-PORT = 8000
+PORT = os.getenv('PORT', 8000)
 DEFAULT_ZIP_FILE_PATH = 'thesis.zip'
 DEFAULT_OUTPUT_FOLDER_PATH = './thesis'
 
