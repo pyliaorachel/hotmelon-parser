@@ -1,4 +1,8 @@
-import config
+try:
+	import config
+except ImportError:
+	import config_template as config
+
 import os
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
 import watson_developer_cloud.natural_language_understanding.features.v1 as features

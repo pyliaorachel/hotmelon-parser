@@ -1,4 +1,8 @@
-import config
+try:
+	import config
+except ImportError:
+	import config_template as config
+
 import pyrebase
 import os
 
